@@ -5,8 +5,8 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+COPY train.py .
 
-# CMD ["python", "train.py"]
-CMD ["python", "predict.py", "1000"]
+CMD ["python", "train.py"]
+# CMD ["python", "predict.py", "1000"]
 

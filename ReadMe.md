@@ -86,3 +86,47 @@ Or via Swagger UI:
 Open /docs
 Click POST /predict
 Try it out
+
+
+Why docker-compose?
+In reality, ML systems have multiple services:
+Training Service  → produces model.pkl
+Inference API     → consumes model.pkl
+( later: DB, Redis, Monitoring, etc. )
+Target Architecture
+house-price-ml/
+├── train.py
+├── app.py
+├── model.pkl   ← shared via volume
+├── requirements.txt
+├── Dockerfile.train
+├── Dockerfile.api
+└── docker-compose.yml
+STEP 1 — Training Dockerfile 
+Dockerfile.train
+Trains model
+Saves model.pkl
+Exits
+STEP 2 — API Dockerfile
+Dockerfile.api
+STEP 3 — docker-compose.yml
+docker-compose.yml
+✔ trainer runs first
+✔ model.pkl shared
+✔ api starts after training
+STEP 4 — Run Everything
+docker-compose up --build
+Expected behavior:
+Trainer runs → creates model
+API starts → loads model
+API stays running
+http://localhost:8000/docs
+STEP 5 — Key Concepts You Must Understand
+1️⃣ Volumes
+volumes:
+  - ./model.pkl:/app/model.pkl
+Allows containers to share files
+2️⃣ depends_on
+depends_on:
+  - trainer
+Controls startup order
