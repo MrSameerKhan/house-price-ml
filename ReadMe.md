@@ -4,12 +4,10 @@ house-price-ml/
 ├── model.pkl
 └── requirements.txt
 
-
 1.train.py
 2.predict.py
 3.requirements.txt
 4.Test Locally
-
 
 Move code to github
 1. Intialize github
@@ -22,11 +20,8 @@ git branch -M main
 git remote add origin https://github.com/<your-username>/house-price-ml.git
 git push -u origin main
 
-
-
 Dockerize the Project
 1. Create Dockerfile
-
 | Line      | Meaning                     |
 | --------- | --------------------------- |
 | `FROM`    | Base OS + Python            |
@@ -34,22 +29,17 @@ Dockerize the Project
 | `COPY`    | Moves files into image      |
 | `RUN`     | Executes at **build time**  |
 | `CMD`     | Executes at **runtime**     |
-
 2. Build Docker image
 docker build -t house-price-ml .
-
 3. Run training inside container
 docker run house-price-ml
-
 4. Persist Model
 model.pkl lives inside container
 Container exits → model is gone
 docker run -v $(pwd):/app house-price-ml
-
 5. Run Prediction via Docker
 docker build -t house-price-ml .
 docker run -v $(pwd):/app house-price-ml
-
 Model You Just Built
 | Layer      | You learned              |
 | ---------- | ------------------------ |
@@ -61,6 +51,7 @@ Model You Just Built
 | Volume     | Model persistence        |
 
 
+----------------------------------- API --------------------------------------
 
 STEP 1 — Create FastAPI App
 Inside your project, create a new file: app.py
@@ -87,6 +78,7 @@ Open /docs
 Click POST /predict
 Try it out
 
+----------------------------------- docker-compose --------------------------------------
 
 Why docker-compose?
 In reality, ML systems have multiple services:
@@ -130,3 +122,7 @@ Allows containers to share files
 depends_on:
   - trainer
 Controls startup order
+
+
+docker run -d --name jenkins -p 8080:8080 -p 50000:50000 -v jenkins_home:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock jenkins/jenkins:lts
+
